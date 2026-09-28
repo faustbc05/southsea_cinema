@@ -74,7 +74,10 @@ class _MovieListingState extends State<MovieListing> {
               ],
             ),
             SizedBox(height: 10),
-            ElevatedButton(onPressed: _addToOrder, child: Text("ADD TO ORDER"))
+            ElevatedButton(
+                onPressed: _addToOrder, child: const Text("ADD TO ORDER")),
+            SizedBox(height: 5),
+            Text(_feedback)
           ],
         ),
       ),
@@ -82,6 +85,8 @@ class _MovieListingState extends State<MovieListing> {
   }
 
   void _addToOrder() {
-    if (_quantity != 0) {}
+    if (_quantity != 0) {
+      setState(() => _feedback = "$_quantity tickets were added to your order");
+    }
   }
 }
