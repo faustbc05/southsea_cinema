@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 
-class MovieListing extends StatelessWidget {
+class MovieListing extends StatefulWidget {
   const MovieListing({super.key});
+
+  @override
+  State<MovieListing> createState() => _MovieListingState();
+}
+
+class _MovieListingState extends State<MovieListing> {
+  int _quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class MovieListing extends StatelessWidget {
       body: Container(
         color: Colors.red,
         padding: const EdgeInsets.all(16),
-        child: const Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,15 +44,30 @@ class MovieListing extends StatelessWidget {
             SizedBox(height: 20),
             Text("Tickets"),
             SizedBox(height: 4),
+            Text("Max Quantity: 5"),
+            SizedBox(height: 4),
             Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 100,
-                  height: 48,
-                  child: Placeholder(),
-                ), //quantity dropdown placeholder
+                DropdownMenu<int>(
+                  initialSelection: 0,
+                  onSelected: (int? value) {
+                    if (value != null) {
+                      setState(() {
+                        _quantity = value;
+                      });
+                    }
+                  },
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry(value: 0, label: "0"),
+                    DropdownMenuEntry(value: 1, label: "1"),
+                    DropdownMenuEntry(value: 2, label: "2"),
+                    DropdownMenuEntry(value: 3, label: "3"),
+                    DropdownMenuEntry(value: 4, label: "4"),
+                    DropdownMenuEntry(value: 5, label: "5")
+                  ],
+                ),
                 SizedBox(width: 10),
                 Text("Adult (£7.50)")
               ],
