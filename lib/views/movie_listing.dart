@@ -15,7 +15,20 @@ class MovieListing extends StatelessWidget {
         elevation: 0,
       ),
       drawer: const NavDrawer(),
-      body: const SizedBox.shrink(),
+      body: Container(
+        color: Colors.red,
+        child: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("STEEL BALL RUN: JOJO'S BIZARRE ADVENTURE (2026) (15)"),
+            Text(
+              'Johnny Joestar joins a race across America, '
+              'where he encounters mysterious powers and dangerous rivals.',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
