@@ -11,6 +11,7 @@ class MovieListing extends StatefulWidget {
 
 class _MovieListingState extends State<MovieListing> {
   int _quantity = 0;
+  String _feedback = "";
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +74,14 @@ class _MovieListingState extends State<MovieListing> {
               ],
             ),
             SizedBox(height: 10),
-            SizedBox(
-              width: 200,
-              height: 30,
-              child: Placeholder(),
-            ) //add to order button
+            ElevatedButton(onPressed: _addToOrder, child: Text("ADD TO ORDER"))
           ],
         ),
       ),
     );
+  }
+
+  void _addToOrder() {
+    if (_quantity != 0) {}
   }
 }
