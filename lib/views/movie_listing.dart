@@ -12,6 +12,9 @@ class MovieListing extends StatefulWidget {
 class _MovieListingState extends State<MovieListing> {
   int _quantity = 0;
   String _feedback = "";
+  int _basketCount = 0;
+  int _ticketLimit = 5;
+  bool _redText = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +27,15 @@ class _MovieListingState extends State<MovieListing> {
       ),
       drawer: const NavDrawer(),
       body: Container(
-        color: Colors.red,
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("STEEL BALL RUN: JOJO'S BIZARRE ADVENTURE (2026) (15)"),
+            Text(
+              "STEEL BALL RUN: JOJO'S BIZARRE ADVENTURE (2026) (15)",
+              style: TextStyle(),
+            ),
             Text(
               'Johnny Joestar joins a race across America, '
               'where he encounters mysterious powers and dangerous rivals.',
@@ -45,7 +50,7 @@ class _MovieListingState extends State<MovieListing> {
             SizedBox(height: 20),
             Text("Tickets"),
             SizedBox(height: 4),
-            Text("Max Quantity: 5"),
+            Text("Max Quantity: $_ticketLimit"),
             SizedBox(height: 4),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -77,7 +82,13 @@ class _MovieListingState extends State<MovieListing> {
             ElevatedButton(
                 onPressed: _addToOrder, child: const Text("ADD TO ORDER")),
             SizedBox(height: 5),
-            Text(_feedback)
+            Text(
+              _feedback,
+              style: TextStyle(
+                color: _redText ? Colors.red : null,
+                fontWeight: _redText ? FontWeight.bold : null,
+              ),
+            )
           ],
         ),
       ),
@@ -85,8 +96,27 @@ class _MovieListingState extends State<MovieListing> {
   }
 
   void _addToOrder() {
-    if (_quantity != 0) {
-      setState(() => _feedback = "$_quantity tickets were added to your order");
+    if (_quantity != 0 && _basketCount + _quantity <= _ticketLimit) {
+      _basketCount += _quantity;
+      setState(() {
+        _feedback = "$_quantity ticket(s) added to your order";
+        _redText = false;
+      });
+    } else if (_basketCount >= _ticketLimit) {
+      setState(() {
+        _feedback = "maximum tickets reached";
+        _redText = true;
+      });
+    } else if (_quantity == 0 && _basketCount < 5) {
+      setState(() {
+        _feedback = "please select a ticket quantity to add";
+        _redText = false;
+      });
+    } else if (_basketCount + _quantity > _ticketLimit) {
+      setState(() {
+        _feedback = "this would exceed the ticket maximum";
+        _redText = true;
+      });
     }
   }
 }
