@@ -34,22 +34,19 @@ class _MovieListingState extends State<MovieListing> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "STEEL BALL RUN: JOJO'S BIZARRE ADVENTURE (2026)",
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "STEEL BALL RUN: JOJO'S BIZZARE ADVENTURE (2026) ",
                         style: TextStyle(
-                            fontWeight: FontWeight.w900,
                             fontSize: 28,
+                            fontWeight: FontWeight.w900,
                             color: cinemaBrandDark),
                       ),
-                    ),
-                    SizedBox(width: 5),
-                    Text("(15)")
-                  ],
+                      TextSpan(text: "(15)"),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 5),
                 Text(
