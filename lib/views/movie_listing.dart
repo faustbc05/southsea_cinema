@@ -13,7 +13,7 @@ class _MovieListingState extends State<MovieListing> {
   int _quantity = 0;
   String _feedback = "";
   int _basketCount = 0;
-  int _ticketLimit = 5;
+  final int _ticketLimit = 5;
   bool _redText = false;
 
   @override
