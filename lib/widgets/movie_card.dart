@@ -29,35 +29,54 @@ class MovieCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  movie.imagePath,
-                  width: 80,
-                  height: 120,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        movie.name,
-                        style: cinemaHeaderStyle,
-                      ),
-                      Text(movie.ageRating),
-                      Text(movie.description),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            LayoutBuilder(builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 400;
+              final posterWidth = isNarrow
+                  ? (constraints.maxWidth * 0.5).clamp(80.0, 180.0).toDouble()
+                  : 120.0;
+
+              final poster = Image.asset(
+                movie.imagePath,
+                width: posterWidth,
+                height: posterWidth * 1.5,
+                fit: BoxFit.cover,
+              );
+
+              final details = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(movie.name, style: cinemaHeaderStyle),
+                    Text(movie.ageRating),
+                    Text(movie.description),
+                  ]);
+
+              if (isNarrow) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    poster,
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    details,
+                  ],
+                );
+              }
+
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  poster,
+                  const SizedBox(width: 16),
+                  Expanded(child: details),
+                ],
+              );
+            }),
             SizedBox(
               height: 10,
             ),
             Text('$date at $time'),
+            SizedBox(height: 10),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(

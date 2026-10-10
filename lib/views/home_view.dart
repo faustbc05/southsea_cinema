@@ -22,11 +22,16 @@ class HomeView extends StatelessWidget {
           elevation: 0,
         ),
         drawer: const NavDrawer(),
-        body: ListView.builder(
-          itemCount: movies.length,
-          itemBuilder: (context, index) {
-            return MovieCard(movie: movies[index]);
-          },
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: ListView.builder(
+              itemCount: movies.length,
+              itemBuilder: (context, index) {
+                return MovieCard(movie: movies[index]);
+              },
+            ),
+          ),
         ));
   }
 }
