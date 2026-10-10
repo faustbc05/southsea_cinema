@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
+import 'package:southsea_cinema/models/movie.dart';
 
 class MovieListing extends StatefulWidget {
-  const MovieListing({super.key});
+  final Movie movie;
+
+  const MovieListing({
+    super.key,
+    required this.movie,
+  });
 
   @override
   State<MovieListing> createState() => _MovieListingState();
@@ -40,26 +46,26 @@ class _MovieListingState extends State<MovieListing> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text:
-                              "STEEL BALL RUN: JOJO'S BIZARRE ADVENTURE (2026) ",
+                          text: "${widget.movie.name} ",
                           style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.w900,
                               color: cinemaBrandDark),
                         ),
-                        TextSpan(text: "(15)"),
+                        TextSpan(text: "(${widget.movie.ageRating})"),
                       ],
                     ),
                   ),
                   SizedBox(height: 5),
                   Text(
-                    'Johnny Joestar joins a race across America, '
-                    'where he encounters mysterious powers and dangerous rivals.',
+                    widget.movie.description,
                   ),
                   SizedBox(height: 20),
-                  Text("Southsea Cinema Room"),
+                  Text(widget.movie.location),
+                  SizedBox(height:4),
+                  Text("Runtime: ${widget.movie.runtimeMinutes} minutes"),
                   SizedBox(height: 4),
-                  Text("Friday 25 Sep 2026, 09:00 - Ends at 10:20"),
+                  Text(widget.movie.screeningTime.toString()),
                 ],
               );
 
@@ -107,7 +113,7 @@ class _MovieListingState extends State<MovieListing> {
                         ],
                       ),
                       SizedBox(width: 10),
-                      Text("Adult (£7.50)")
+                      Text("Adult (£${widget.movie.ticketPrice.toStringAsFixed(2)})")
                     ],
                   ),
                   SizedBox(height: 10),
