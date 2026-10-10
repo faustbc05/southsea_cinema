@@ -13,6 +13,14 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = MaterialLocalizations.of(context);
+    final screening = movie.screeningTime;
+
+    final date = localizations.formatMediumDate(screening);
+    final time = localizations.formatTimeOfDay(
+      TimeOfDay.fromDateTime(screening),
+      alwaysUse24HourFormat: true,
+    );
     return Card(
       color: cinemaSurface,
       margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -49,7 +57,7 @@ class MovieCard extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(movie.screeningTime.toString()),
+            Text('$date at $time'),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(

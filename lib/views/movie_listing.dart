@@ -24,6 +24,14 @@ class _MovieListingState extends State<MovieListing> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = MaterialLocalizations.of(context);
+    final screening = widget.movie.screeningTime;
+
+    final date = localizations.formatMediumDate(screening);
+    final time = localizations.formatTimeOfDay(
+      TimeOfDay.fromDateTime(screening),
+      alwaysUse24HourFormat: true,
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text(appTitle, style: cinemaHeaderStyle),
@@ -62,10 +70,10 @@ class _MovieListingState extends State<MovieListing> {
                   ),
                   SizedBox(height: 20),
                   Text(widget.movie.location),
-                  SizedBox(height:4),
+                  SizedBox(height: 4),
                   Text("Runtime: ${widget.movie.runtimeMinutes} minutes"),
                   SizedBox(height: 4),
-                  Text(widget.movie.screeningTime.toString()),
+                  Text('$date at $time'),
                 ],
               );
 
@@ -113,7 +121,8 @@ class _MovieListingState extends State<MovieListing> {
                         ],
                       ),
                       SizedBox(width: 10),
-                      Text("Adult (£${widget.movie.ticketPrice.toStringAsFixed(2)})")
+                      Text(
+                          "Adult (£${widget.movie.ticketPrice.toStringAsFixed(2)})")
                     ],
                   ),
                   SizedBox(height: 10),
