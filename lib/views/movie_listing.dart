@@ -121,8 +121,7 @@ class _MovieListingState extends State<MovieListing> {
                         ],
                       ),
                       SizedBox(width: 10),
-                      Text(
-                          "Adult (${widget.movie.formattedPrice})")
+                      Text("Adult (${widget.movie.formattedPrice})")
                     ],
                   ),
                   SizedBox(height: 10),
