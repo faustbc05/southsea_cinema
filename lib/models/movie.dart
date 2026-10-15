@@ -20,4 +20,8 @@ class Movie {
     required this.runtimeMinutes,
     required this.location,
   });
+
+  String get formattedPrice {
+    return '£${ticketPrice.toStringAsFixed(2)}';
+  }
 }
