@@ -26,7 +26,21 @@ void main() {
       await tester.tap(find.text('ADD TO ORDER'));
       await tester.pump();
 
-      expect(find.text('please select a ticket quantity to add'), findsOneWidget);
+      expect(
+          find.text('please select a ticket quantity to add'), findsOneWidget);
+
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Book Tickets'), findsNWidgets(2));
+
+      await tester.ensureVisible(find.text('Book Tickets').last);
+      await tester.pump();
+      await tester.tap(find.text('Book Tickets').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Screen 2'), findsOneWidget);
+      expect(find.text('please select a ticket quantity to add'), findsNothing);
     });
   });
 }
