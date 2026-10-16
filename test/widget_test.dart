@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:southsea_cinema/main.dart';
 import 'package:southsea_cinema/views/movie_listing.dart';
@@ -41,6 +42,24 @@ void main() {
 
       expect(find.text('Screen 2'), findsOneWidget);
       expect(find.text('please select a ticket quantity to add'), findsNothing);
+    });
+
+    testWidgets('Hamburger menu opens the navigation drawer',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(SouthseaCinemaApp());
+      await tester.tap(find.text("Book Tickets").first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+
+      expect(tester.state<ScaffoldState>(find.byType(Scaffold)).isDrawerOpen,
+          isTrue);
+
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+
+      expect(tester.state<ScaffoldState>(find.byType(Scaffold)).isDrawerOpen,
+        isFalse);
     });
   });
 }
