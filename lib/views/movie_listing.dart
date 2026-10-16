@@ -39,6 +39,15 @@ class _MovieListingState extends State<MovieListing> {
         iconTheme: const IconThemeData(color: cinemaBrand),
         elevation: 0,
         leading: const BackButton(),
+        actions: [
+          Builder(builder: (drawerContext) {
+            return IconButton(
+                onPressed: () {
+                  Scaffold.of(drawerContext).openDrawer();
+                },
+                icon: const Icon(Icons.menu));
+          })
+        ],
       ),
       drawer: const NavDrawer(),
       body: Container(
