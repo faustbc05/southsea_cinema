@@ -3,6 +3,8 @@ import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 import 'package:southsea_cinema/models/movie.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
+import 'package:southsea_cinema/models/basket_item.dart';
+import 'package:southsea_cinema/repositories/basket_repository.dart';
 
 class MovieListing extends StatefulWidget {
   final Movie movie;
@@ -19,7 +21,6 @@ class MovieListing extends StatefulWidget {
 class _MovieListingState extends State<MovieListing> {
   int _quantity = 0;
   String _feedback = "";
-  int _basketCount = 0;
   final int _ticketLimit = 5;
   bool _redText = false;
 
@@ -133,9 +134,7 @@ class _MovieListingState extends State<MovieListing> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  PrimaryButton(
-                      onPressed: _addToOrder,
-                      label: "ADD TO ORDER"),
+                  PrimaryButton(onPressed: _addToOrder, label: "ADD TO ORDER"),
                   SizedBox(height: 5),
                   Text(
                     _feedback,
@@ -175,23 +174,25 @@ class _MovieListingState extends State<MovieListing> {
   }
 
   void _addToOrder() {
-    if (_quantity != 0 && _basketCount + _quantity <= _ticketLimit) {
-      _basketCount += _quantity;
+    final int basketCount = BasketRepository.instance.getTotalItems();
+    if (_quantity != 0 && basketCount + _quantity <= _ticketLimit) {
+      BasketItem item = BasketItem(movie: widget.movie, quantity: _quantity);
+      BasketRepository.instance.addItem(item);
       setState(() {
         _feedback = "$_quantity ticket(s) added to your order";
         _redText = false;
       });
-    } else if (_quantity != 0 && _basketCount >= _ticketLimit) {
+    } else if (_quantity != 0 && basketCount >= _ticketLimit) {
       setState(() {
         _feedback = "maximum tickets reached";
         _redText = true;
       });
-    } else if (_quantity == 0 && _basketCount < _ticketLimit) {
+    } else if (_quantity == 0 && basketCount < _ticketLimit) {
       setState(() {
         _feedback = "please select a ticket quantity to add";
         _redText = false;
       });
-    } else if (_basketCount + _quantity > _ticketLimit) {
+    } else if (basketCount + _quantity > _ticketLimit) {
       setState(() {
         _feedback = "this would exceed the ticket maximum";
         _redText = true;
