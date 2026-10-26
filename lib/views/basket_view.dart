@@ -25,7 +25,7 @@ class _BasketViewState extends State<BasketView> {
         body: Center(
           child: items.isEmpty
               ? Column(
-                mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text('Your Basket is Empty'),
                     SizedBox(
