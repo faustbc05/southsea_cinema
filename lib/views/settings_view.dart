@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/models/user_settings.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
@@ -92,7 +93,10 @@ class _SettingsViewState extends State<SettingsView> {
               height: 5,
             ),
             SwitchListTile(
-                title: Text('Sign up to the Newsletter?'),
+                title: Text(
+                  'Sign up to the Newsletter?',
+                  style: TextStyle(color: cinemaFontWhite),
+                ),
                 value: _receiveNewsletter,
                 onChanged: (bool receive) {
                   setState(() {
