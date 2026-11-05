@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:southsea_cinema/repositories/movie_repository.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Unit tests for movie repository', () {
     test('movie repository contains two movies', () {
       final MovieRepository movieRepository = MovieRepository();
@@ -43,6 +44,15 @@ void main() {
       final Movie? movie = movieRepository.getMovieById('missing-movie');
 
       expect(movie, isNull);
+    });
+
+    test('Asset loader reads all films from movies.json', () async {
+      final MovieRepository data = MovieRepository();
+      final List<Movie> movies = await data.loadMoviesFromAsset();
+
+      expect(movies.length, 2);
+      expect(movies[0].id, 'berserk');
+      expect(movies[1].id, 'steel-ball-run');
     });
   });
 }
