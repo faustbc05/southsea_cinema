@@ -57,5 +57,74 @@ void main() {
 
       expect(movie.formattedPrice, '£5.90');
     });
+
+    test('Movie.fromJson converts all fields correctly', () {
+      final Map<String, dynamic> data = {
+        'id': 'samplefilm',
+        'name': 'Sample',
+        'description': 'This is a sample',
+        'imagePath': 'assets/images/berserk.jpg',
+        'ticketPrice': 5.9,
+        'ageRating': 'PG',
+        'screeningTime': '2026-11-05T21:51:00',
+        'runtimeMinutes': 100,
+        'location': 'Test Screen',
+      };
+      final Movie movieFromJson = Movie.fromJson(data);
+
+      expect(movieFromJson.id, 'samplefilm');
+      expect(movieFromJson.name, 'Sample');
+      expect(movieFromJson.description, 'This is a sample');
+      expect(movieFromJson.imagePath, 'assets/images/berserk.jpg');
+      expect(movieFromJson.ticketPrice, 5.9);
+      expect(movieFromJson.ageRating, 'PG');
+      expect(movieFromJson.screeningTime, DateTime(2026, 11, 5, 21, 51));
+      expect(movieFromJson.runtimeMinutes, 100);
+      expect(movieFromJson.location, 'Test Screen');
+    });
+
+    test('Movie.toJson exports all fields correctly', () {
+      final movie = Movie(
+        id: 'samplefilm',
+        name: 'Sample',
+        description: 'This is a sample',
+        imagePath: 'assets/images/berserk.jpg',
+        ticketPrice: 5.9,
+        ageRating: 'PG',
+        screeningTime: DateTime(2026, 11, 5, 21, 51),
+        runtimeMinutes: 100,
+        location: 'Test Screen',
+      );
+
+      expect(movie.toJson(), {
+        'id': 'samplefilm',
+        'name': 'Sample',
+        'description': 'This is a sample',
+        'imagePath': 'assets/images/berserk.jpg',
+        'ticketPrice': 5.9,
+        'ageRating': 'PG',
+        'screeningTime': '2026-11-05T21:51:00.000',
+        'runtimeMinutes': 100,
+        'location': 'Test Screen',
+      });
+    });
+
+    test('Movie.fromJson accepts a whole-number ticket price', () {
+      final Map<String, dynamic> data = {
+        'id': 'samplefilm',
+        'name': 'Sample',
+        'description': 'This is a sample',
+        'imagePath': 'assets/images/berserk.jpg',
+        'ticketPrice': 5,
+        'ageRating': 'PG',
+        'screeningTime': '2026-11-05T21:51:00',
+        'runtimeMinutes': 100,
+        'location': 'Test Screen',
+      };
+      final Movie movieFromJson = Movie.fromJson(data);
+
+      expect(movieFromJson.ticketPrice, 5.0);
+      expect(movieFromJson.ticketPrice, isA<double>());
+    });
   });
 }
