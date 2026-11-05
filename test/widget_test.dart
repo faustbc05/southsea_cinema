@@ -4,15 +4,18 @@ import 'package:southsea_cinema/main.dart';
 import 'package:southsea_cinema/views/movie_listing.dart';
 import 'package:southsea_cinema/widgets/movie_card.dart';
 import 'package:southsea_cinema/repositories/basket_repository.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   setUp(() {
     BasketRepository.instance.clear();
+    rootBundle.clear();
   });
   group('Cinema app widget tests', () {
     testWidgets('Home page displays its title, movie cards and booking buttons',
         (WidgetTester tester) async {
       await tester.pumpWidget(const SouthseaCinemaApp());
+      await tester.pumpAndSettle();
       expect(find.text('Southsea Cinema & Arts Centre'), findsOneWidget);
       expect(find.byType(MovieCard), findsNWidgets(2));
       expect(find.text('Book Tickets'), findsNWidgets(2));
@@ -21,6 +24,7 @@ void main() {
     testWidgets('Tapping Book Tickets opens the movie listing',
         (WidgetTester tester) async {
       await tester.pumpWidget(SouthseaCinemaApp());
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Book Tickets').first);
       await tester.pumpAndSettle();
 
@@ -51,6 +55,7 @@ void main() {
     testWidgets('Hamburger menu opens the navigation drawer',
         (WidgetTester tester) async {
       await tester.pumpWidget(SouthseaCinemaApp());
+      await tester.pumpAndSettle();
       await tester.tap(find.text("Book Tickets").first);
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.menu));
@@ -69,6 +74,7 @@ void main() {
     testWidgets('Adding selected tickets stores them in the shared basket',
         (WidgetTester tester) async {
       await tester.pumpWidget(SouthseaCinemaApp());
+      await tester.pumpAndSettle();
       await tester.tap(find.text("Book Tickets").first);
       await tester.pumpAndSettle();
       await tester.tap(find.byType(DropdownMenu<int>));
