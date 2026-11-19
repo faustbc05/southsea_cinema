@@ -1,30 +1,40 @@
-import 'package:southsea_cinema/models/basket_item.dart';
-import 'dart:convert';
-
 class Booking {
-  final String id;
-  final List<BasketItem> items;
-  final DateTime bookedAt;
+  final int? id;
+  final int bookingNumber;
+  final String summary;
+  final double total;
+  final String date;
 
-  Booking({required this.id, required this.items, required this.bookedAt});
+  const Booking({
+    this.id,
+    required this.bookingNumber,
+    required this.summary,
+    required this.total,
+    required this.date,
+  });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'bookedAt': bookedAt.toIso8601String(),
-      'items': jsonEncode(items.map((item) => item.toJson()).toList()),
+  Map<String, Object?> toMap() {
+    final Map<String, Object?> data = {
+      'booking_number': bookingNumber,
+      'summary': summary,
+      'total': total,
+      'date': date,
     };
+
+    if (id != null) {
+      data['id'] = id;
+    }
+
+    return data;
   }
 
-  factory Booking.fromMap(Map<String, dynamic> map) {
-    final decodedItems = jsonDecode(map['items'] as String) as List<dynamic>;
-
+  factory Booking.fromMap(Map<String, Object?> map) {
     return Booking(
-      id: map['id'] as String,
-      items: decodedItems
-          .map((item) => BasketItem.fromJson(item as Map<String, dynamic>))
-          .toList(),
-      bookedAt: DateTime.parse(map['bookedAt'] as String),
+      id: map['id'] as int?,
+      bookingNumber: map['booking_number'] as int,
+      summary: map['summary'] as String,
+      total: (map['total'] as num).toDouble(),
+      date: map['date'] as String,
     );
   }
 }
