@@ -168,6 +168,7 @@ class _BasketViewState extends State<BasketView> {
                                       ],
                                     ),
                                     trailing: IconButton(
+                                      key: ValueKey('remove-${item.movie.id}'),
                                       onPressed: () {
                                         setState(() {
                                           basket.removeItem(index);

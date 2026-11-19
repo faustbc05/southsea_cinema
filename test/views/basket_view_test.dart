@@ -190,5 +190,76 @@ void main() {
       expect(find.text('Could not save your booking. Please try again.'),
           findsOneWidget);
     });
+
+    testWidgets('Removing middle film preserves the other two',
+        (WidgetTester tester) async {
+      Movie movie2 = Movie(
+          id: 'test2',
+          name: 'test movie 2',
+          description: 'second test',
+          imagePath: 'assets/images/berserk.jpg',
+          ticketPrice: 3.99,
+          ageRating: 'U',
+          screeningTime: DateTime(2025, 12, 12, 15, 3),
+          runtimeMinutes: 115,
+          location: 'Test Screen');
+      Movie movie3 = Movie(
+          id: 'test3',
+          name: 'test movie 3',
+          description: 'third test',
+          imagePath: 'assets/images/berserk.jpg',
+          ticketPrice: 4.99,
+          ageRating: 'PG',
+          screeningTime: DateTime(2025, 11, 12, 15, 3),
+          runtimeMinutes: 114,
+          location: 'Test Screen');
+
+      BasketRepository.instance.addItem(BasketItem(movie: movie1, quantity: 1));
+      BasketRepository.instance.addItem(BasketItem(movie: movie2, quantity: 1));
+      BasketRepository.instance.addItem(BasketItem(movie: movie3, quantity: 1));
+
+      await tester.runAsync(() async {
+        await tester.pumpWidget(MaterialApp(
+          home: BasketView(),
+        ));
+      });
+
+      await tester.pumpAndSettle();
+
+      expect(BasketRepository.instance.getItems().length, 3);
+      expect(find.text(movie1.name), findsOneWidget);
+      expect(find.text(movie2.name), findsOneWidget);
+
+      await tester.scrollUntilVisible(
+        find.text(movie3.name),
+        100,
+        scrollable: find.byType(Scrollable).first,
+      );
+
+      expect(find.text(movie3.name), findsOneWidget);
+
+      final middleDeleteButton = find.byKey(const ValueKey('remove-test2'));
+
+      await tester.scrollUntilVisible(
+        middleDeleteButton,
+        -100,
+        scrollable: find.byType(Scrollable).first,
+      );
+
+      await tester.tap(middleDeleteButton);
+      await tester.pumpAndSettle();
+
+      expect(find.text(movie2.name), findsNothing);
+
+      expect(BasketRepository.instance.getItems().length, 2);
+
+      expect(
+        BasketRepository.instance
+            .getItems()
+            .map((item) => item.movie.id)
+            .toList(),
+        [movie1.id, movie3.id],
+      );
+    });
   });
 }
