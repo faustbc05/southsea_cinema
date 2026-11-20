@@ -1,5 +1,4 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/models/user_settings.dart';
 import 'package:southsea_cinema/widgets/nav_drawer.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
@@ -9,9 +8,19 @@ const String prefName = 'user_name';
 const String prefAddress = 'user_address';
 const String prefEmail = 'user_email';
 const String prefNewsletter = 'user_newsletter';
+const String prefThemeMode = 'theme_mode';
 
 class SettingsView extends StatefulWidget {
-  const SettingsView({super.key});
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  const SettingsView({
+    super.key,
+    this.themeMode = ThemeMode.dark,
+    this.onThemeModeChanged = _defaultThemeModeChanged,
+  });
+
+  static void _defaultThemeModeChanged(ThemeMode themeMode) {}
 
   @override
   State<SettingsView> createState() => _SettingsViewState();
@@ -146,7 +155,9 @@ class _SettingsViewState extends State<SettingsView> {
             SwitchListTile(
                 title: Text(
                   'Sign up to the Newsletter?',
-                  style: TextStyle(color: cinemaFontWhite),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 value: _receiveNewsletter,
                 onChanged: (bool receive) {
@@ -154,6 +165,15 @@ class _SettingsViewState extends State<SettingsView> {
                     _receiveNewsletter = receive;
                   });
                 }),
+            SwitchListTile(
+              title: const Text('Dark mode'),
+              value: widget.themeMode == ThemeMode.dark,
+              onChanged: (bool useDarkMode) {
+                widget.onThemeModeChanged(
+                  useDarkMode ? ThemeMode.dark : ThemeMode.light,
+                );
+              },
+            ),
             PrimaryButton(label: 'Save Settings', onPressed: _saveSettings),
             SizedBox(
               height: 5,

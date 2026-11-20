@@ -7,7 +7,7 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: cinemaBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -15,14 +15,17 @@ class NavDrawer extends StatelessWidget {
             Container(
               height: 60,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              color: cinemaSurface,
+              color: Theme.of(context).colorScheme.surface,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       appTitle,
-                      style: cinemaHeaderStyle,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -35,12 +38,12 @@ class NavDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            const DrawerTile(title: 'Home', route: '/'),
-            const DrawerTile(
+            DrawerTile(title: 'Home', route: '/'),
+            DrawerTile(
               title: 'My Basket',
               route: '/basket',
             ),
-            const DrawerTile(
+            DrawerTile(
               title: 'My Settings',
               route: '/settings',
             )
@@ -61,7 +64,10 @@ class DrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title, style: const TextStyle(color: cinemaFontWhite)),
+      title: Text(
+        title,
+        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+      ),
       onTap: () {
         Navigator.pop(context);
         if (route != null) {

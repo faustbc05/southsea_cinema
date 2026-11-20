@@ -52,7 +52,10 @@ class _MovieListingState extends State<MovieListing> {
       body: Container(
         padding: const EdgeInsets.all(16),
         child: DefaultTextStyle.merge(
-          style: TextStyle(color: cinemaFontWhite, fontSize: 16),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: 16,
+          ),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final filmDetails = Column(
@@ -107,11 +110,13 @@ class _MovieListingState extends State<MovieListing> {
                       DropdownMenu<int>(
                         inputDecorationTheme: InputDecorationTheme(
                           filled: true,
-                          fillColor: cinemaFontWhite,
+                          fillColor: Theme.of(context).colorScheme.surface,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.zero),
                         ),
-                        textStyle: TextStyle(color: Colors.black),
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         initialSelection: 0,
                         onSelected: (int? value) {
                           if (value != null) {

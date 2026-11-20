@@ -14,7 +14,9 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: cinemaBrand,
-        foregroundColor: cinemaFontWhite,
+        foregroundColor: Theme.of(context).brightness == Brightness.dark
+            ? cinemaFontWhite
+            : Colors.black87,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       ),
       child: Text(label),

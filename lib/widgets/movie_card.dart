@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:southsea_cinema/models/movie.dart';
-import 'package:southsea_cinema/constants.dart';
 import 'package:southsea_cinema/views/movie_listing.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
 
@@ -23,7 +22,7 @@ class MovieCard extends StatelessWidget {
       alwaysUse24HourFormat: true,
     );
     return Card(
-      color: cinemaSurface,
+      color: Theme.of(context).colorScheme.surface,
       margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -46,7 +45,12 @@ class MovieCard extends StatelessWidget {
               final details = Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(movie.name, style: cinemaHeaderStyle),
+                    Text(
+                      movie.name,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
                     Text(movie.ageRating),
                     Text(movie.description),
                   ]);
