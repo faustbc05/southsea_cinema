@@ -1,6 +1,12 @@
-﻿{
+{
   "version": "0.2.0",
   "configurations": [
+    {
+      "name": "SM S948B (wireless) (mobile)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "adb-R5GL11F9BVX-U6MXlo._adb-tls-connect._tcp"
+    },
     {
       "name": "Flutter (Edge)",
       "request": "launch",

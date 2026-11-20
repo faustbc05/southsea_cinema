@@ -46,3 +46,6 @@ app.*.map.json
 
 # Generated Android build files
 /android/build/
+
+/devtools_options.yaml
+.vscode/launch.json
