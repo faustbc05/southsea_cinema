@@ -28,7 +28,8 @@ void main() {
     final Database db = await databaseFactoryFfiNoIsolate.openDatabase(
       inMemoryDatabasePath,
       options: OpenDatabaseOptions(
-        version: 1,
+        version: 2,
+        onConfigure: CinemaDatabase.instance.configureDatabase,
         onCreate: CinemaDatabase.instance.createTables,
       ),
     );
@@ -107,6 +108,19 @@ void main() {
       expect(bookings, isNotNull);
       expect(bookings?.length, 1);
       expect(bookings?.first.bookingNumber, 1001);
+
+      final items = await tester.runAsync(
+        () => CinemaDatabase.instance.getBookingItems(bookings!.first.id!),
+      );
+      expect(items, isNotNull);
+      expect(items!.length, 1);
+      expect(items.first.movieName, 'Test Movie 1');
+      expect(items.first.unitPrice, 5.2);
+      expect(items.first.quantity, 1);
+      expect(
+        find.text('1 x Test Movie 1 at £5.20 each — £5.20'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Clear basket empties the basket without checkout confirmation',
@@ -163,6 +177,8 @@ void main() {
 
       expect(find.text('Booking #1002'), findsOneWidget);
       expect(find.text('Booking #1001'), findsOneWidget);
+      expect(find.text('Summary: 2 x Berserk (1997)'), findsOneWidget);
+      expect(find.text('Summary: 1 x Berserk (1997)'), findsOneWidget);
       final newestY = tester.getTopLeft(find.text('Booking #1002')).dy;
       final oldestY = tester.getTopLeft(find.text('Booking #1001')).dy;
 

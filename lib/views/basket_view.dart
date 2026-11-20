@@ -5,6 +5,7 @@ import 'package:southsea_cinema/repositories/basket_repository.dart';
 import 'package:southsea_cinema/widgets/primary_button.dart';
 import 'package:southsea_cinema/models/booking.dart';
 import 'package:southsea_cinema/database/cinema_db.dart';
+import 'package:southsea_cinema/models/booking_item.dart';
 
 class BasketView extends StatefulWidget {
   const BasketView({super.key});
@@ -16,6 +17,7 @@ class BasketView extends StatefulWidget {
 class _BasketViewState extends State<BasketView> {
   String _confirmationMessage = '';
   List<Booking> _bookings = [];
+  Map<int, List<BookingItem>> _bookingItems = {};
   bool _loadingBookings = true;
   String? _bookingError;
 
@@ -28,6 +30,14 @@ class _BasketViewState extends State<BasketView> {
   Future<void> _loadBookings() async {
     try {
       final bookings = await CinemaDatabase.instance.getAllBookings();
+      final bookingItems = <int, List<BookingItem>>{};
+
+      for (final booking in bookings) {
+        if (booking.id != null) {
+          bookingItems[booking.id!] =
+              await CinemaDatabase.instance.getBookingItems(booking.id!);
+        }
+      }
 
       if (!mounted) {
         return;
@@ -35,6 +45,7 @@ class _BasketViewState extends State<BasketView> {
 
       setState(() {
         _bookings = bookings;
+        _bookingItems = bookingItems;
         _loadingBookings = false;
         _bookingError = null;
       });
@@ -76,7 +87,10 @@ class _BasketViewState extends State<BasketView> {
         date: date,
       );
 
-      await CinemaDatabase.instance.insertBooking(booking);
+      await CinemaDatabase.instance.insertBookingWithItems(
+        booking,
+        basket.getItems(),
+      );
 
       if (!mounted) return;
 
@@ -110,14 +124,49 @@ class _BasketViewState extends State<BasketView> {
         itemCount: _bookings.length,
         itemBuilder: (context, index) {
           final Booking booking = _bookings[index];
+          final items = booking.id == null
+              ? const <BookingItem>[]
+              : _bookingItems[booking.id!] ?? const <BookingItem>[];
           return Card(
             child: ListTile(
               title: Text('Booking #${booking.bookingNumber}'),
-              subtitle: Text(
-                  'Summary: ${booking.summary}, Date Booked: ${booking.date}, Total: £${booking.total.toStringAsFixed(2)}'),
+              subtitle: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (items.isEmpty)
+                    Text('Summary: ${booking.summary}')
+                  else
+                    ...items.map(
+                      (item) => Text(
+                        '${item.quantity} x ${item.movieName} at '
+                        '£${item.unitPrice.toStringAsFixed(2)} each '
+                        '— £${item.lineTotal.toStringAsFixed(2)}',
+                      ),
+                    ),
+                  Text('Date Booked: ${_formatBookingDate(booking.date)}'),
+                  Text('Total: £${booking.total.toStringAsFixed(2)}'),
+                ],
+              ),
             ),
           );
         });
+  }
+
+  String _formatBookingDate(String storedDate) {
+    final date = DateTime.tryParse(storedDate);
+
+    if (date == null) {
+      return storedDate;
+    }
+
+    final localDate = date.toLocal();
+
+    String twoDigits(int value) => value.toString().padLeft(2, '0');
+
+    return '${twoDigits(localDate.day)}/${twoDigits(localDate.month)}/'
+        '${localDate.year} '
+        '${twoDigits(localDate.hour)}:${twoDigits(localDate.minute)}';
   }
 
   @override

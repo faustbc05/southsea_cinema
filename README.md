@@ -12,9 +12,10 @@ basket, checkout, and booking history.
 - Select ticket quantities from a movie listing and add tickets to a shared
   basket. The basket displays item quantities, line totals, and the order total.
 - Remove individual items or clear the basket.
-- Check out a basket to create a booking with a generated booking number.
-- Store and display previous bookings in descending booking-number order using
-  SQLite.
+- Check out a basket to create a booking with a generated booking number using
+  transaction-protected SQLite checkout.
+- Store itemised booking records and display previous bookings in descending
+  booking-number order using SQLite version 2.
 - Manage profile settings including full name, address, email address, and
   newsletter preference.
 - Switch between light and dark themes. The selected theme and profile
